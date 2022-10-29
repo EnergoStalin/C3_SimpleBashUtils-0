@@ -7,7 +7,7 @@
 
 int main(int argc, char* const* argv) {
   int ret_code = 0;
-  s_config config;
+  CatConfig config;
   if ((ret_code = ParseArgs(argc - 1, argv + 1, &config)) == OK) {
     ret_code = ProcessFile(config);
   }

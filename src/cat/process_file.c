@@ -1,5 +1,5 @@
 #include "process_file.h"
 
-#include "return_codes.h"
+#include "return_code.h"
 
-RETURN_CODE ProcessFile(s_config config) { return config.verbose; }
+ReturnCode ProcessFile(CatConfig config) { return config.verbose; }

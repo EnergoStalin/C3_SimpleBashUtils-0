@@ -3,14 +3,13 @@
 
 #include <stdbool.h>
 
-typedef struct
-{
+typedef struct {
   char *file;
   bool verbose;
   bool number_nonblank;
   bool number_lines;
   bool extra_symbols;
   bool squeeze_blank;
-} s_config;
+} CatConfig;
 
-#endif // SRC_CAT_CONFIG_H_
+#endif  // SRC_CAT_CONFIG_H_

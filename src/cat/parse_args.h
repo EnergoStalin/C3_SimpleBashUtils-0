@@ -4,6 +4,6 @@
 #include "cat_config.h"
 #include "return_code.h"
 
-RETURN_CODE ParseArgs(int argc, char *const *argv, s_config *config);
+ReturnCode ParseArgs(int argc, char *const *argv, CatConfig *config);
 
 #endif  // SRC_CAT_PARSE_ARGS_H_
