@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "config.h"
-#include "errors.h"
+#include "cat_config.h"
 #include "parse_args.h"
 #include "process_file.h"
+#include "return_code.h"
 
 int main(int argc, char* const* argv) {
   int ret_code = 0;

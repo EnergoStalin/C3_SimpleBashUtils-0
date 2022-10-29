@@ -1,9 +1,9 @@
-#ifndef _SRC_CAT_PARSE_ARGS_H
-#define _SRC_CAT_PARSE_ARGS_H
+#ifndef SRC_CAT_PARSE_ARGS_H_
+#define SRC_CAT_PARSE_ARGS_H_
 
-#include "config.h"
-#include "errors.h"
+#include "cat_config.h"
+#include "return_code.h"
 
-ERROR_CODE ParseArgs(int argc, char *const *argv, s_config *config);
+RETURN_CODE ParseArgs(int argc, char *const *argv, s_config *config);
 
-#endif  //_SRC_CAT_PARSE_ARGS_H
+#endif  // SRC_CAT_PARSE_ARGS_H_

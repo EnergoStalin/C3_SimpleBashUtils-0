@@ -5,9 +5,11 @@
 #include <string.h>
 #include <unistd.h>
 
-ERROR_CODE ParseArgs(int argc, char *const *argv, s_config *config) {
-  ERROR_CODE ret_code = OK;
-  int c, longid = 1;
+#include "return_code.h"
+
+RETURN_CODE ParseArgs(int argc, char *const *argv, s_config *config) {
+  RETURN_CODE ret_code = OK;
+  int c, longid;
   struct option longopts;
 
   const char *optstring =

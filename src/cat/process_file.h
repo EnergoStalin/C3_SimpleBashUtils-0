@@ -1,9 +1,9 @@
-#ifndef _SRC_CAT_PROCESS_FILE_H
-#define _SRC_CAT_PROCESS_FILE_H
+#ifndef SRC_CAT_PROCESS_FILE_H_
+#define SRC_CAT_PROCESS_FILE_H_
 
-#include "config.h"
-#include "errors.h"
+#include "cat_config.h"
+#include "return_code.h"
 
-ERROR_CODE ProcessFile(s_config config);
+RETURN_CODE ProcessFile(s_config config);
 
-#endif  //_SRC_CAT_PROCESS_FILE_H
+#endif  // SRC_CAT_PROCESS_FILE_H_

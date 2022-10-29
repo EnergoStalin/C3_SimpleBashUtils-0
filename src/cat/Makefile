@@ -1,20 +1,17 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror --std=c11
-BUILDDIR=../../build
+CFLAGS=-Wall -Wextra -Werror --std=c11 --pedantic
+EXEC=s21_cat
 
-all: s21_cat
+all: $(EXEC)
 
-$(BUILDDIR):
-	mkdir -p $@
-
-.PHONY: s21_cat
-s21_cat: $(wildcard *.c) | $(BUILDDIR)
-	$(CC) $(CFLAGS) $^ -o $(BUILDDIR)/$@
+.PHONY: $(EXEC)
+$(EXEC): $(wildcard *.c) | $(BUILDDIR)
+	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: rebuild
 rebuild: clean all
 
 .PHONY: clean
 clean:
-	rm -rf $(BUILDDIR)
+	rm -rf $(EXEC)
 	rm -rf *.o
