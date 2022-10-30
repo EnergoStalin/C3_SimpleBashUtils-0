@@ -1,15 +1,13 @@
-#ifndef SRC_CAT_CONFIG_H_
-#define SRC_CAT_CONFIG_H_
-
-#include <stdbool.h>
+#ifndef SRC_CAT_cat_config_H_
+#define SRC_CAT_cat_config_H_
 
 typedef struct {
   char *file;
-  bool verbose;
-  bool number_nonblank;
-  bool number_lines;
-  bool extra_symbols;
-  bool squeeze_blank;
+  int verbose;
+  int number_nonblank;
+  int number_lines;
+  int extra_symbols;
+  int squeeze_blank;
 } CatConfig;
 
-#endif  // SRC_CAT_CONFIG_H_
+#endif  // SRC_CAT_cat_config_H_

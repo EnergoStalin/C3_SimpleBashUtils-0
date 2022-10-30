@@ -6,11 +6,15 @@
 #include "return_code.h"
 
 int main(int argc, char* const* argv) {
-  int ret_code = 0;
-  CatConfig config;
-  if ((ret_code = ParseArgs(argc - 1, argv + 1, &config)) == OK) {
-    ret_code = ProcessFile(config);
+  ReturnCode return_code = OK;
+  CatConfig config = {0};
+  if ((return_code = ParseArgs(argc, argv, &config)) == OK) {
+    return_code = ProcessFile(&config);
   }
 
-  return ret_code;
+  if (return_code != OK) {
+    printf("Something went wrong: %s\n", GetCodeName(return_code));
+  }
+
+  return return_code;
 }

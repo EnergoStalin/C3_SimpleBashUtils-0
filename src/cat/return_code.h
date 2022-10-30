@@ -1,12 +1,8 @@
 #ifndef SRC_CAT_RETURN_CODE_H_
 #define SRC_CAT_RETURN_CODE_H_
 
-typedef enum { OK } ReturnCode;
+typedef enum { OK, NO_FILE, INVALID_ARGUMENTS } ReturnCode;
 
-const char *GetCodeName(ReturnCode code) {
-  static const char *kReturnCodeNames[] = {[OK] = "OK"};
-
-  return kReturnCodeNames[code];
-}
+const char *GetCodeName(ReturnCode code);
 
 #endif  // SRC_CAT_RETURN_CODE_H_
