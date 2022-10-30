@@ -1,5 +1,5 @@
-#ifndef SRC_CAT_cat_config_H_
-#define SRC_CAT_cat_config_H_
+#ifndef SRC_CAT_CONFIG_H_
+#define SRC_CAT_CONFIG_H_
 
 typedef struct {
   char *file;
@@ -10,4 +10,4 @@ typedef struct {
   int squeeze_blank;
 } CatConfig;
 
-#endif  // SRC_CAT_cat_config_H_
+#endif  // SRC_CAT_CONFIG_H_
