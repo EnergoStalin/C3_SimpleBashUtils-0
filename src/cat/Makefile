@@ -11,8 +11,18 @@ $(EXEC): $(wildcard *.c)
 .PHONY: rebuild
 rebuild: clean $(EXEC)
 
-debug: CFLAGS+=-g
+.PHONY: $(EXEC)
+debug: CFLAGS+=-g -DDEBUG
 debug: rebuild
+
+.PHONY: test
+test: $(EXEC)
+	chmod +x test/test.py
+	cp $(EXEC) test/
+	chmod +x test/s21_cat
+	cd test && ./test.py
+	rm test/s21_cat
+
 
 .PHONY: clean
 clean:
