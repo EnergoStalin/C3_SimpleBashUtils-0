@@ -9,77 +9,58 @@
 
 #include "return_code.h"
 
-static void AllocateAndPrepareOptions(char **short_option_string,
-                                      struct option **long_option_struct) {
-  *long_option_struct = calloc(4, sizeof(struct option));
-  struct option *o = *long_option_struct;
-
-  o->name = "number-nonblank";
-  o->has_arg = 0;
-  o->flag = NULL;
-  o->val = 'b';
-
-  o++;
-  o->name = "number";
-  o->has_arg = 0;
-  o->flag = NULL;
-  o->val = 'n';
-
-  o++;
-  o->name = "squeeze-blank";
-  o->has_arg = 0;
-  o->flag = NULL;
-  o->val = 's';
-
-  *short_option_string = "+benstvTE";
-}
-
 ReturnCode ProcessArgs(int argc, char *const *argv, CatConfig *config) {
   ReturnCode return_code = OK;
-  char *short_option_string = NULL;
-  struct option *long_option_struct = NULL;
+  char *short_option_string = "+benstvTE";
   int long_option_id = 0;
 
-  AllocateAndPrepareOptions(&short_option_string, &long_option_struct);
+  const struct option long_option_struct[] = {{"number-nonblank", no_argument, &config->number_nonblank, 1},
+                                        {"number", no_argument, &config->number_lines, 1},
+                                        {"squeeze-blank", no_argument, &config->squeeze_blank, 1},
+                                        {0, 0, 0, 0}};
 
   int c = 0;
-  while ((c = getopt_long(argc, argv, short_option_string, long_option_struct,
-                          &long_option_id)) != -1 &&
-         return_code == OK) {
-    switch (c) {
-      case 'b':
-        config->number_nonblank = 1;
-        break;
-      case 'n':
-        config->number_lines = 1;
-        break;
-      case 's':
-        config->squeeze_blank = 1;
-        break;
-      case 'E':
-        config->extra_symbols_endline = 1;
-        break;
-      case 'e':
-        config->extra_symbols_endline = 1;
-        config->verbose = 1;
-        break;
-      case 'T':
-        config->extra_symbols_tabs = 1;
-        break;
-      case 't':
-        config->extra_symbols_tabs = 1;
-        config->verbose = 1;
-        break;
-      case 'v':
-        config->verbose = 1;
-        break;
-      default:
-        printf("%s", argv[long_option_id]);
-        return_code = INVALID_ARGUMENTS;
-        break;
+  while (return_code == OK && c != -1 && optind < argc) {
+    if(argv[optind][0] != '-') {
+      optind++;
+      continue;
+    }
+    c = getopt_long(argc, argv, short_option_string, long_option_struct,
+                    &long_option_id);
+    switch (c)
+    {
+    case 'b':
+      config->number_nonblank = 1;
+      break;
+    case 'n':
+      config->number_lines = 1;
+      break;
+    case 's':
+      config->squeeze_blank = 1;
+      break;
+    case 'E':
+      config->extra_symbols_endline = 1;
+      break;
+    case 'e':
+      config->extra_symbols_endline = 1;
+      config->verbose = 1;
+      break;
+    case 'T':
+      config->extra_symbols_tabs = 1;
+      break;
+    case 't':
+      config->extra_symbols_tabs = 1;
+      config->verbose = 1;
+      break;
+    case 'v':
+      config->verbose = 1;
+      break;
+    default:
+      printf("%s", argv[long_option_id]);
+      return_code = INVALID_ARGUMENTS;
+      break;
     }
   }
-  free(long_option_struct);
 
   if(config->number_nonblank)
     config->number_lines = 0;
