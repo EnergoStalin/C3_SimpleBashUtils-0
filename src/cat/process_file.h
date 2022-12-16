@@ -4,6 +4,6 @@
 #include "cat_config.h"
 #include "return_code.h"
 
-ReturnCode ProcessFile(const CatConfig *config);
+ReturnCode ProcessFile(char *path, const CatConfig *config);
 
 #endif  // SRC_CAT_PROCESS_FILE_H_

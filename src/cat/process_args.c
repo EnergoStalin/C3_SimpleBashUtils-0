@@ -1,4 +1,5 @@
-#include "parse_args.h"
+#include "process_file.h"
+#include "process_args.h"
 
 #include <getopt.h>
 #include <stdio.h>
@@ -33,17 +34,7 @@ static void AllocateAndPrepareOptions(char **short_option_string,
   *short_option_string = "+benstvTE";
 }
 
-static ReturnCode ValidateConfig(const CatConfig *config) {
-  ReturnCode return_code = OK;
-
-  if (config->file == 0) {
-    return_code = NO_FILE;
-  }
-
-  return return_code;
-}
-
-ReturnCode ParseArgs(int argc, char *const *argv, CatConfig *config) {
+ReturnCode ProcessArgs(int argc, char *const *argv, CatConfig *config) {
   ReturnCode return_code = OK;
   char *short_option_string = NULL;
   struct option *long_option_struct = NULL;
@@ -55,12 +46,33 @@ ReturnCode ParseArgs(int argc, char *const *argv, CatConfig *config) {
   while ((c = getopt_long(argc, argv, short_option_string, long_option_struct,
                           &long_option_id)) != -1 &&
          return_code == OK) {
-    printf("%c\n", c);
     switch (c) {
       case 'b':
         config->number_nonblank = 1;
         break;
-
+      case 'n':
+        config->number_lines = 1;
+        break;
+      case 's':
+        config->squeeze_blank = 1;
+        break;
+      case 'E':
+        config->extra_symbols_endline = 1;
+        break;
+      case 'e':
+        config->extra_symbols_endline = 1;
+        config->verbose = 1;
+        break;
+      case 'T':
+        config->extra_symbols_tabs = 1;
+        break;
+      case 't':
+        config->extra_symbols_tabs = 1;
+        config->verbose = 1;
+        break;
+      case 'v':
+        config->verbose = 1;
+        break;
       default:
         printf("%s", argv[long_option_id]);
         return_code = INVALID_ARGUMENTS;
@@ -69,8 +81,13 @@ ReturnCode ParseArgs(int argc, char *const *argv, CatConfig *config) {
   }
   free(long_option_struct);
 
-  if (return_code == OK) {
-    return_code = ValidateConfig(config);
+  if(config->number_nonblank)
+    config->number_lines = 0;
+
+  for (int i = 1; i < argc && return_code == OK; i++) {
+    if(argv[i][0] == '-') continue;
+
+    return_code = ProcessFile(argv[i], config);
   }
 
   return return_code;

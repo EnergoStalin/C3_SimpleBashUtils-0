@@ -2,11 +2,11 @@
 #define SRC_CAT_CONFIG_H_
 
 typedef struct {
-  char *file;
   int verbose;
   int number_nonblank;
   int number_lines;
-  int extra_symbols;
+  int extra_symbols_endline;
+  int extra_symbols_tabs;
   int squeeze_blank;
 } CatConfig;
 
