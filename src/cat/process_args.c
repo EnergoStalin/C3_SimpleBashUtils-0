@@ -65,10 +65,15 @@ ReturnCode ProcessArgs(int argc, char *const *argv, CatConfig *config) {
   if(config->number_nonblank)
     config->number_lines = 0;
 
+  size_t files_processed = 0;
   for (int i = 1; i < argc && return_code == OK; i++) {
     if(argv[i][0] == '-') continue;
 
     return_code = ProcessFile(argv[i], config);
+    files_processed++;
+  }
+  if(!files_processed) {
+    ProcessFile(0, config);
   }
 
   return return_code;

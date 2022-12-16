@@ -17,12 +17,26 @@ def check_case(original, s21):
             f.write(original.stdout.decode('utf-8'))
         raise Exception(f'Stdout not match see (./stdout_s21 != ./stdout_original)')
 
-def invoke_case(stdin, *args):
-    check_case(
-        subprocess.run(['cat', *args], capture_output=True, stdin=stdin),
-        subprocess.run(['./s21_cat', *args], capture_output=True, stdin=stdin)
-    )
+def invoke_case(*args):
+    try:
+        check_case(
+            subprocess.run(['cat', *args], capture_output=True),
+            subprocess.run(['./s21_cat', *args], capture_output=True)
+        )
+    except Exception as ex:
+        print(ex, args)
+        raise ex
     return ' '.join(args) + ' ok'
+
+def single_file_test(args):
+    print("Testing single file:")
+    random.shuffle(args)
+    print(invoke_case(*args))
+
+def multiple_file_test(args):
+    print("Testing multiple files:")
+    random.shuffle(args)
+    print(invoke_case(*args))
 
 def main():
     for _ in glob.glob('./std*'):
@@ -40,36 +54,13 @@ def main():
         for i in range(1, len(all_args)):
             for chars in itertools.combinations(all_args, i):
                 char_list = list(chars)
+                args = [*list(map(lambda x: f'-{x}', char_list))]
 
-                print("Testing single file argument variants:")
-                args = [*list(map(lambda x: f'-{x}', char_list)), file, *long_args]
-                random.shuffle(args)
                 try:
-                    print(invoke_case(None, *args))
-                except Exception as ex:
-                    if(not err): err = ex
-                    print(ex, args)
-                    break;
-
-                print("Testing multiple files")
-                args = [*args, *all_files, *long_args]
-                random.shuffle(args)
-                try:
-                    print(invoke_case(None, *args))
-                except Exception as ex:
-                    if(not err): err = ex
-                    print(ex, args)
-                print()
-
-                print("Testing stdin")
-                args = [*args, *all_files, *long_args]
-                random.shuffle(args)
-                try:
-                    print(invoke_case(open(file, 'r', encoding='utf-8'), *args))
-                except Exception as ex:
-                    if(not err): err = ex
-                    print(ex, args)
-                print()
+                    single_file_test([*args, file])
+                    multiple_file_test([*args, *all_files])
+                except:
+                    break
             else:
                 continue
             break
