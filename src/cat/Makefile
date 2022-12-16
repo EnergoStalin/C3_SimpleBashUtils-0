@@ -23,7 +23,6 @@ test: $(EXEC)
 	cd test && ./cat.py
 	rm test/$(EXEC)
 
-
 .PHONY: clean
 clean:
 	rm -rf $(EXEC)

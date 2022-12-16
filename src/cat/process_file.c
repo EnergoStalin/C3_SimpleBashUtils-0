@@ -1,6 +1,6 @@
-#include <stdio.h>
-
 #include "process_file.h"
+
+#include <stdio.h>
 
 #include "return_code.h"
 
@@ -8,7 +8,8 @@
 #define FILE_BUFFER_SIZE 512
 #endif
 
-void ProcessBuffer(char buffer[FILE_BUFFER_SIZE], size_t actual_size, const CatConfig* config) {
+void ProcessBuffer(char buffer[FILE_BUFFER_SIZE], size_t actual_size,
+                   const CatConfig *config) {
   static char prev = '\n';
 
   for (size_t i = 0; i < actual_size; i++) {
@@ -17,7 +18,7 @@ void ProcessBuffer(char buffer[FILE_BUFFER_SIZE], size_t actual_size, const CatC
     if (prev == '\n') {
       if (config->squeeze_blank) {
         static size_t nlines = 0;
-        if(curr == '\n') {
+        if (curr == '\n') {
           nlines++;
         } else {
           nlines = 0;
@@ -32,25 +33,24 @@ void ProcessBuffer(char buffer[FILE_BUFFER_SIZE], size_t actual_size, const CatC
         static size_t strings = 1;
         fprintf(stdout, "%6lu\t", strings++);
       }
-      if(config->number_lines) {
+      if (config->number_lines) {
         static size_t strings = 1;
         fprintf(stdout, "%6lu\t", strings++);
       }
     }
 
-    if(curr == '\n') {
-      if(config->extra_symbols_endline) {
+    if (curr == '\n') {
+      if (config->extra_symbols_endline) {
         fputc('$', stdout);
       }
-    } else if(curr == '\t') {
-      if(config->extra_symbols_tabs) {
+    } else if (curr == '\t') {
+      if (config->extra_symbols_tabs) {
         fputs("^I", stdout);
         curr = 0;
       }
     }
 
-    if(curr)
-      fputc(curr, stdout);
+    if (curr) fputc(curr, stdout);
 
     prev = buffer[i];
   }
@@ -63,16 +63,14 @@ ReturnCode ProcessFile(char *path, const CatConfig *config) {
 
   FILE *file = path ? fopen(path, "r") : stdin;
 
-  if(file) {
+  if (file) {
     size_t read;
     while ((read = fread(buffer, 1, FILE_BUFFER_SIZE, file)) != 0) {
       ProcessBuffer(buffer, read, config);
     }
 
     fclose(file);
-  }
-  else
-  {
+  } else {
     return_code = NO_FILE;
   }
 

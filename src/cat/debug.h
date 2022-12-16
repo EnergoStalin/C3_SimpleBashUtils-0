@@ -10,7 +10,6 @@
 #define FLOGF(_FILE, FORMAT, ...) \
   fprintf(_FILE, __FILE__ " - " LINE_STRING ": " FORMAT, __VA_ARGS__)
 
-#define LOGF(FORMAT, ...) \
-  FLOGF(stdout, FORMAT, __VA_ARGS__)
+#define LOGF(FORMAT, ...) FLOGF(stdout, FORMAT, __VA_ARGS__)
 
-#endif // SRC_CAT_DEBUG_H
+#endif  // SRC_CAT_DEBUG_H
