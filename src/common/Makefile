@@ -22,6 +22,12 @@ test: $(EXEC)
 	cd test && ./$(EXEC).py
 	rm test/$(EXEC)
 
+.PHONY: test-ci
+test-ci:
+	chmod +x test/$(EXEC).py
+	chmod +x test/$(EXEC)
+	cd test && ./$(EXEC).py
+
 .PHONY: clean
 clean:
 	rm -rf $(EXEC)
