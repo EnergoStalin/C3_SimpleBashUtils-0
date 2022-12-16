@@ -17,11 +17,11 @@ debug: rebuild
 
 .PHONY: test
 test: $(EXEC)
-	chmod +x test/test.py
+	chmod +x test/cat.py
 	cp $(EXEC) test/
-	chmod +x test/s21_cat
-	cd test && ./test.py
-	rm test/s21_cat
+	chmod +x test/$(EXEC)
+	cd test && ./cat.py
+	rm test/$(EXEC)
 
 
 .PHONY: clean

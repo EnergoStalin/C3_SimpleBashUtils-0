@@ -14,9 +14,9 @@ ReturnCode ProcessArgs(int argc, char *const *argv, CatConfig *config) {
   char *short_option_string = "+benstvTE";
   int long_option_id = 0;
 
-  const struct option long_option_struct[] = {{"number-nonblank", no_argument, &config->number_nonblank, 1},
-                                        {"number", no_argument, &config->number_lines, 1},
-                                        {"squeeze-blank", no_argument, &config->squeeze_blank, 1},
+  const struct option long_option_struct[] = {{"number-nonblank", no_argument, 0, 'b'},
+                                        {"number", no_argument, 0, 'n'},
+                                        {"squeeze-blank", no_argument, 0, 's'},
                                         {0, 0, 0, 0}};
 
   int c = 0;

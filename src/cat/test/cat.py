@@ -1,6 +1,5 @@
 #! /usr/bin/python3
-
-import subprocess, os, itertools, glob, random
+import subprocess, os, itertools, glob, random, test
 
 def check_case(original, s21):
     if(original.returncode != s21.returncode):
@@ -32,9 +31,9 @@ def main():
     err = None
     all_args = 'benstvTE'
     long_args = [
-        {'s': '--squeeze-blank'},
-        {'b': '--number-nonblank'},
-        {'n': '--number'},
+        '--squeeze-blank',
+        '--number-nonblank',
+        '--number',
     ]
     all_files = glob.glob('./cases/*')
     for file in all_files:
@@ -43,7 +42,7 @@ def main():
                 char_list = list(chars)
 
                 print("Testing single file argument variants:")
-                args = [*list(map(lambda x: f'-{x}', char_list)), file]
+                args = [*list(map(lambda x: f'-{x}', char_list)), file, *long_args]
                 random.shuffle(args)
                 try:
                     print(invoke_case(*args))
@@ -53,7 +52,7 @@ def main():
                     break;
 
                 print("Testing multiple files")
-                args = [*args, *all_files]
+                args = [*args, *all_files, *long_args]
                 random.shuffle(args)
                 try:
                     print(invoke_case(*args))
