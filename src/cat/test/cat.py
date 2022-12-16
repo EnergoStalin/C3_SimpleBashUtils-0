@@ -17,10 +17,10 @@ def check_case(original, s21):
             f.write(original.stdout.decode('utf-8'))
         raise Exception(f'Stdout not match see (./stdout_s21 != ./stdout_original)')
 
-def invoke_case(*args):
+def invoke_case(stdin, *args):
     check_case(
-        subprocess.run(['cat', *args], capture_output=True),
-        subprocess.run(['./s21_cat', *args], capture_output=True)
+        subprocess.run(['cat', *args], capture_output=True, stdin=stdin),
+        subprocess.run(['./s21_cat', *args], capture_output=True, stdin=stdin)
     )
     return ' '.join(args) + ' ok'
 
@@ -45,7 +45,7 @@ def main():
                 args = [*list(map(lambda x: f'-{x}', char_list)), file, *long_args]
                 random.shuffle(args)
                 try:
-                    print(invoke_case(*args))
+                    print(invoke_case(None, *args))
                 except Exception as ex:
                     if(not err): err = ex
                     print(ex, args)
@@ -55,7 +55,17 @@ def main():
                 args = [*args, *all_files, *long_args]
                 random.shuffle(args)
                 try:
-                    print(invoke_case(*args))
+                    print(invoke_case(None, *args))
+                except Exception as ex:
+                    if(not err): err = ex
+                    print(ex, args)
+                print()
+
+                print("Testing stdin")
+                args = [*args, *all_files, *long_args]
+                random.shuffle(args)
+                try:
+                    print(invoke_case(open(file, 'r', encoding='utf-8'), *args))
                 except Exception as ex:
                     if(not err): err = ex
                     print(ex, args)
