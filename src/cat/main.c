@@ -1,8 +1,8 @@
 #include <stdio.h>
 
+#include "../common/return_code.h"
 #include "cat_config.h"
 #include "process_args.h"
-#include "return_code.h"
 
 int main(int argc, char* const* argv) {
   ReturnCode return_code = OK;

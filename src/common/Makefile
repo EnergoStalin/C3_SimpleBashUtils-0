@@ -4,7 +4,7 @@ CFLAGS=-Wall -Wextra -Werror --std=c11 --pedantic
 all: rebuild
 
 .PHONY: $(EXEC)
-$(EXEC): $(wildcard *.c)
+$(EXEC): $(wildcard *.c) $(wildcard ../common/*.c)
 	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: rebuild

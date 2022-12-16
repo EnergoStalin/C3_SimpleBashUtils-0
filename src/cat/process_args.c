@@ -6,8 +6,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "../common/return_code.h"
 #include "process_file.h"
-#include "return_code.h"
 
 ReturnCode ProcessArgs(int argc, char *const *argv, CatConfig *config) {
   ReturnCode return_code = OK;
