@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - github-develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install GCC
+      uses: egor-tensin/setup-gcc@v1
+    - name: Build cat
+      run: |
+        cd src/cat
+        make s21_cat
+    - name: Build grep
+      run: |
+        cd src/grep
+        make s21_grep
+        
+    - name: Upload s21_cat
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: s21_cat
+        path: ./src/cat/s21_cat
+    - name: Upload s21_grep
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: s21_grep
+        path: ./src/grep/s21_grep
+  test:
+    needs: build
+    uses: ./.github/workflows/test.yml
+      

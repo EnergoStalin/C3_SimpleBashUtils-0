@@ -1,0 +1,39 @@
+name: Tests
+
+on:
+  workflow_call:
+  
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4.3.1
+      with:
+        python-version: 3.10.6
+        architecture: x64
+    - name: Miniverter Tests
+      run: |
+        docker rmi -f school21/miniverter:1.0
+        docker build . -t school21/miniverter:1.0 -f materials/build/Dockerfile
+        docker run school21/miniverter:1.0
+    - name: Download s21_cat
+      uses: actions/download-artifact@master
+      with:
+        name: s21_cat
+        path: ./src/cat/test
+    - name: s21_cat Tests
+      run: |
+        cd ./src/cat
+        make test-ci
+    - name: Download s21_grep
+      uses: actions/download-artifact@master
+      with:
+        name: s21_grep
+        path: ./src/grep/test
+    - name: s21_grep Tests
+      run: |
+        cd ./src/grep
+        make test-ci

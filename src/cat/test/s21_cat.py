@@ -9,7 +9,4 @@ from common.test import *
 if __name__ == '__main__':
     cleanup()
 
-    try:
-        run_tests('cat', 'benstvTE', list(map(lambda x: path.abspath(x), glob.glob('./cases/*'))))
-    except CaseFailedException as ex:
-        print(ex)
+    run_tests('cat', 'benstvTE', list(map(lambda x: path.abspath(x), glob.glob('./cases/*'))))
