@@ -4,12 +4,6 @@
 #include "process_args.h"
 #include "return_code.h"
 
-// #define DEBUG
-
-#ifdef DEBUG
-#include "debug.h"
-#endif
-
 int main(int argc, char* const* argv) {
   ReturnCode return_code = OK;
   CatConfig config = {0};
