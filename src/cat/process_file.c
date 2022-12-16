@@ -4,7 +4,9 @@
 
 #include "return_code.h"
 
+#ifndef FILE_BUFFER_SIZE
 #define FILE_BUFFER_SIZE 512
+#endif
 
 void ProcessBuffer(char buffer[FILE_BUFFER_SIZE], size_t actual_size, const CatConfig* config) {
   static char prev = '\n';
