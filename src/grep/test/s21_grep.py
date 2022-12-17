@@ -9,4 +9,4 @@ from common.test import *
 if __name__ == '__main__':
     cleanup()
 
-    # run_tests('cat', 'eivclnhso', list(map(lambda x: path.abspath(x), glob.glob('./cases/*'))))
+    # run_tests('grep', 'eivclnhso', list(map(lambda x: path.abspath(x), glob.glob('./cases/*'))))

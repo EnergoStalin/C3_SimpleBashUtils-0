@@ -61,15 +61,15 @@ ReturnCode ProcessFile(char *path, const CatConfig *config) {
 
   char buffer[FILE_BUFFER_SIZE];
 
-  FILE *file = path ? fopen(path, "r") : stdin;
+  FILE *fd = path ? fopen(path, "r") : stdin;
 
-  if (file) {
+  if (fd) {
     size_t read;
-    while ((read = fread(buffer, 1, FILE_BUFFER_SIZE, file)) != 0) {
+    while ((read = fread(buffer, 1, FILE_BUFFER_SIZE, fd)) != 0) {
       ProcessBuffer(buffer, read, config);
     }
 
-    fclose(file);
+    fclose(fd);
   } else {
     return_code = NO_FILE;
   }

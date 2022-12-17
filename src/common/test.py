@@ -30,12 +30,13 @@ def check_case(original: 'subprocess.CompletedProcess', s21: 'subprocess.Complet
             f.write(original.stdout.decode('utf-8'))
         raise Exception(f'Stdout not match see (./stdout_s21 != ./stdout_original)')
 
-def invoke_case(exec: 'str', *args) -> 'str':
+def invoke_case(exec: 'str', *args, stdin = None) -> 'str':
     orig = 0
     s21 = 0
     try:
-        orig = subprocess.run([exec, *args], capture_output=True)
-        s21 = subprocess.run([f'./s21_{exec}', *args], capture_output=True)
+        orig = subprocess.run([exec, *args], stdin=stdin, capture_output=True)
+        if(stdin): stdin.seek(0, 0)
+        s21 = subprocess.run([f'./s21_{exec}', *args], stdin=stdin, capture_output=True)
         check_case(
             orig,
             s21
@@ -45,12 +46,18 @@ def invoke_case(exec: 'str', *args) -> 'str':
     return ' '.join(args) + ' ok'
 
 def single_file_test(exec, args):
-    print("Testing single file:")
+    print('Testing single file:')
     random.shuffle(args)
     print(invoke_case(exec, *args))
 
+def stdin_test(exec, args, file):
+    print('Testing stdin files:')
+    random.shuffle(args)
+    with open(file, 'r', encoding='utf-8') as f:
+        print(invoke_case(exec, *args, stdin=f))
+
 def multiple_file_test(exec, args):
-    print("Testing multiple files:")
+    print('Testing multiple files:')
     random.shuffle(args)
     print(invoke_case(exec, *args))
 
@@ -58,7 +65,8 @@ def cleanup():
     for _ in glob.glob('./std*'):
         os.remove(_)
 
-def run_tests(name: str, all_args: 'str', all_files: 'list[str]'):
+def run_tests(name: str, all_args: 'str', file: 'str'):
+    all_files = glob.glob(os.path.join(os.path.dirname(file), 'cases/*'))
     for file in all_files:
         for i in range(1, len(all_args)):
             for chars in itertools.combinations(all_args, i):
@@ -66,5 +74,6 @@ def run_tests(name: str, all_args: 'str', all_files: 'list[str]'):
                 args = [*list(map(lambda x: f'-{x}', char_list))]
 
                 single_file_test(name, [*args, file])
+                stdin_test(name, args, file)
                 multiple_file_test(name, [*args, *all_files])
 
