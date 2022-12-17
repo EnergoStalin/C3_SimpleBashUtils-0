@@ -1,6 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror --std=c11 --pedantic
 
+all: CFLAGS+=-fsanitize=address
 all: rebuild
 
 .PHONY: $(EXEC)
@@ -30,5 +31,4 @@ test-ci:
 
 .PHONY: clean
 clean:
-	rm -rf $(EXEC)
-	rm -rf *.o
+	rm -rf $(EXEC) *.o

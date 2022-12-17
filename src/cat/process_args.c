@@ -56,7 +56,6 @@ ReturnCode ProcessArgs(int argc, char *const *argv, CatConfig *config) {
         config->verbose = 1;
         break;
       default:
-        printf("%s", argv[long_option_id]);
         return_code = INVALID_ARGUMENTS;
         break;
     }
