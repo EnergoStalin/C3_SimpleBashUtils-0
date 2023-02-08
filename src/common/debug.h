@@ -1,5 +1,5 @@
-#ifndef SRC_CAT_DEBUG_H
-#define SRC_CAT_DEBUG_H
+#ifndef SRC_COMMON_DEBUG_H
+#define SRC_COMMON_DEBUG_H
 
 #include <stdio.h>
 
@@ -12,4 +12,4 @@
 
 #define LOGF(FORMAT, ...) FLOGF(stdout, FORMAT, __VA_ARGS__)
 
-#endif  // SRC_CAT_DEBUG_H
+#endif  // SRC_COMMON_DEBUG_H

@@ -1,3 +1,3 @@
-EXEC=s21_grep
+EXEC:=s21_grep
 
 include ../common/Makefile

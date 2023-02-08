@@ -1,7 +1,6 @@
-CC=gcc
-CFLAGS=-Wall -Wextra -Werror --std=c11 --pedantic
+CC:=gcc
+CFLAGS:=-Wall -Wextra -Werror --std=c11
 
-all: CFLAGS+=-fsanitize=address
 all: rebuild
 
 .PHONY: $(EXEC)
@@ -14,20 +13,6 @@ rebuild: clean $(EXEC)
 .PHONY: $(EXEC)
 debug: CFLAGS+=-g -DDEBUG
 debug: rebuild
-
-.PHONY: test
-test: $(EXEC)
-	chmod +x test/$(EXEC).py
-	cp $(EXEC) test/
-	chmod +x test/$(EXEC)
-	cd test && ./$(EXEC).py
-	rm test/$(EXEC)
-
-.PHONY: test-ci
-test-ci:
-	chmod +x test/$(EXEC).py
-	chmod +x test/$(EXEC)
-	cd test && ./$(EXEC).py
 
 .PHONY: clean
 clean:

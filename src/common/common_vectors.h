@@ -1,0 +1,10 @@
+#ifndef SRC_COMMON_COMMON_VECTORS_H
+#define SRC_COMMON_COMMON_VECTORS_H
+
+#include "vect.h"
+
+VECT_DECLARE_NAME(char *, char_ptr)
+VECT_DECLARE_NESTED_PTR_FREE_FOR_NAME(char_ptr)
+VECT_DECLARE_NAME(char, char)
+
+#endif /* SRC_COMMON_COMMON_VECTORS_H */

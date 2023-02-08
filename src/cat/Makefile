@@ -1,3 +1,3 @@
-EXEC=s21_cat
+EXEC:=s21_cat
 
 include ../common/Makefile
