@@ -1,5 +1,5 @@
-#ifndef SRC_GREP_CONFIG_H_
-#define SRC_GREP_CONFIG_H_
+#ifndef SRC_GREP_GREP_CONFIG_H
+#define SRC_GREP_GREP_CONFIG_H
 
 typedef struct {
   char *regexp;            // -e
@@ -15,4 +15,4 @@ typedef struct {
   int only_matching;   // -o
 } GrepConfig;
 
-#endif  // SRC_GREP_CONFIG_H_
+#endif /* SRC_GREP_GREP_CONFIG_H */

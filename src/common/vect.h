@@ -93,4 +93,4 @@ size_t vect_ins(vect *v, size_t pos);
     vect_free(v);                                    \
   }
 
-#endif  // SRC_COMMON_VECT_H
+#endif /* SRC_COMMON_VECT_H */

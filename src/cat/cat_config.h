@@ -1,5 +1,5 @@
-#ifndef SRC_CAT_CONFIG_H_
-#define SRC_CAT_CONFIG_H_
+#ifndef SRC_CAT_CAT_CONFIG_H
+#define SRC_CAT_CAT_CONFIG_H
 
 typedef struct {
   int verbose;
@@ -10,4 +10,4 @@ typedef struct {
   int squeeze_blank;
 } CatConfig;
 
-#endif  // SRC_CAT_CONFIG_H_
+#endif /* SRC_CAT_CAT_CONFIG_H */

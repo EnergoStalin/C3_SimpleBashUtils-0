@@ -1,5 +1,5 @@
-#ifndef SRC_GREP_PROCESS_FILE_H_
-#define SRC_GREP_PROCESS_FILE_H_
+#ifndef SRC_GREP_PROCESS_FILE_H
+#define SRC_GREP_PROCESS_FILE_H
 
 #include <regex.h>
 
@@ -10,4 +10,4 @@
 
 ReturnCode ProcessFile(char *path, const GrepConfig *config);
 
-#endif  // SRC_GREP_PROCESS_FILE_H_
+#endif /* SRC_GREP_PROCESS_FILE_H */
