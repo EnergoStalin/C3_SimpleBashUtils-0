@@ -85,12 +85,12 @@ size_t vect_ins(vect *v, size_t pos);
     v->data[vect_ins((vect *)v, pos)] = value;                   \
   }
 
-#define VECT_GENERATE_NESTED_PTR_FREE_FOR_NAME(NAME) \
-  void vect_free_inner_ptrs_##NAME(vect_##NAME *v) { \
-    for (size_t i = 0; i < v->size; i++) {           \
-      free(vect_at_##NAME(v, i));                    \
-    }                                                \
-    vect_free(v);                                    \
+#define VECT_GENERATE_NESTED_PTR_FREE_FOR_NAME(NAME, FREEFUNC) \
+  void vect_free_inner_ptrs_##NAME(vect_##NAME *v) {           \
+    for (size_t i = 0; i < v->size; i++) {                     \
+      FREEFUNC(vect_at_##NAME(v, i));                          \
+    }                                                          \
+    vect_free(v);                                              \
   }
 
 #endif /* SRC_COMMON_VECT_H */
