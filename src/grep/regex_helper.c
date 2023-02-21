@@ -18,15 +18,21 @@ ReturnCode ReadRegexesFromFile(char *file, const GrepConfig *config,
 
   FILE *fptr = fopen(file, "r");
   if (fptr) {
-    vect_char *line = vect_init_char(256);
+    vect_char *line = vect_init_char(2);
     while (ReadLineToVector(fptr, line) && return_code == OK) {
+      if (line->size == 1U) {
+        continue;
+      }
+
       regex_t *reg = calloc(sizeof(regex_t), 1);
       if (CompileRegexWithFlags(line->data, config, reg) == OK) {
         vect_push_regex_t_ptr(regexs, reg);
+      } else {
+        free(reg);
       }
     }
+    fclose(fptr);
     vect_free(line);
-    // fclose(fptr);
   } else {
     return_code = FILE_DONT_EXIST;
   }

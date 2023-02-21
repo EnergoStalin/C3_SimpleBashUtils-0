@@ -67,22 +67,27 @@ size_t vect_ins(vect *v, size_t pos);
     return v->data + vect_at((vect *)v, pos);                    \
   }                                                              \
   TYPE vect_at_##NAME(vect_##NAME *v, size_t pos) {              \
-    return v->data[vect_at((vect *)v, pos)];                     \
+    size_t idx = vect_at((vect *)v, pos);                        \
+    return v->data[idx];                                         \
   }                                                              \
   void vect_push_##NAME(vect_##NAME *v, TYPE value) {            \
-    v->data[vect_push((vect *)v)] = value;                       \
+    size_t idx = vect_push((vect *)v);                           \
+    v->data[idx] = value;                                        \
   }                                                              \
   void vect_set_##NAME(vect_##NAME *v, size_t pos, TYPE value) { \
-    v->data[vect_set((vect *)v, pos)] = value;                   \
+    size_t idx = vect_set((vect *)v, pos);                       \
+    v->data[idx] = value;                                        \
   }                                                              \
   TYPE vect_pop_##NAME(vect_##NAME *v) {                         \
-    return v->data[vect_pop((vect *)v)];                         \
+    size_t idx = vect_pop((vect *)v);                            \
+    return v->data[idx];                                         \
   }                                                              \
   void vect_rem_##NAME(vect_##NAME *v, size_t pos) {             \
     vect_rem((vect *)v, pos);                                    \
   }                                                              \
   void vect_ins_##NAME(vect_##NAME *v, size_t pos, TYPE value) { \
-    v->data[vect_ins((vect *)v, pos)] = value;                   \
+    size_t idx = vect_ins((vect *)v, pos);                       \
+    v->data[idx] = value;                                        \
   }
 
 #define VECT_GENERATE_NESTED_PTR_FREE_FOR_NAME(NAME, FREEFUNC) \

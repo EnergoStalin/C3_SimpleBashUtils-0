@@ -6,7 +6,12 @@ int ReadLineToVector(FILE *fptr, vect_char *line) {
   while (c != '\n' && (eof = (c = getc(fptr)) != EOF)) {
     vect_push_char(line, c);
   }
-  vect_push_char(line, 0);
+
+  if (eof == EOF) {
+    vect_push_char(line, 0);
+  } else {
+    line->data[line->size - 1] = 0;
+  }
 
   return eof;
 }

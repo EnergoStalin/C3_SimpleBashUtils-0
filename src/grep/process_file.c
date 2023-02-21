@@ -22,10 +22,7 @@ ReturnCode ProcessFile(char *path, const GrepConfig *config) {
       }
     }
     fclose(fptr);
-    for (size_t i = 0; i < regexs->size - 1; i++) {
-      regfree(vect_at_regex_t_ptr(regexs, i));
-    }
-    vect_free(regexs);
+    vect_free_inner_ptrs_regex_t_ptr(regexs);
   } else {
     return_code = FILE_DONT_EXIST;
   }
