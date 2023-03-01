@@ -1,3 +1,14 @@
+# Integrity tested on
+# grep --version
+# grep (GNU grep) 3.7
+# Copyright (C) 2021 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Written by Mike Haertel and others; see
+# <https://git.sv.gnu.org/cgit/grep.git/tree/AUTHORS>.
+
 import subprocess, itertools, json, os
 
 def run_tests(exe, tArgs, tFiles, extra = [], rArgs = []):
