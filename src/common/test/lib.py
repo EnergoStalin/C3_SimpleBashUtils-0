@@ -1,3 +1,5 @@
+# Launch with Python 3.10.6
+
 # Integrity tested on
 # grep --version
 # grep (GNU grep) 3.7
