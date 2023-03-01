@@ -2,6 +2,7 @@
 
 #include <getopt.h>
 
+#include "../common/common_vectors.h"
 #include "./process_file.h"
 
 ReturnCode ProcessArgs(int argc, char *const *argv, GrepConfig *config) {
@@ -16,15 +17,19 @@ ReturnCode ProcessArgs(int argc, char *const *argv, GrepConfig *config) {
       {"no-filename", no_argument, 0, 'h'},
       {"no-messages", no_argument, 0, 's'},
       {"file", required_argument, 0, 'f'},
-      {"only-matching", no_argument, 0, 'o'},
       {0, 0, 0, 0}};
-  char *short_option_string = "e:ivclnhsf:o";
+  char *short_option_string = "e:ivclnhsf:";
   int long_option_id = 0, c = 0;
 
-  while (optind < argc) {
-    while (return_code == OK &&
-           (c = getopt_long(argc, argv, short_option_string, long_option_struct,
-                            &long_option_id)) != -1) {
+  vect_char_ptr *files = vect_init_char_ptr(1);
+
+  while (return_code == OK && c != -1 && optind < argc) {
+    if (argv[optind][0] != '-') {
+      vect_push_char_ptr(files, argv[optind]);
+      optind++;
+    } else {
+      c = getopt_long(argc, argv, short_option_string, long_option_struct,
+                      &long_option_id);
       switch (c) {
         case 'e':
           config->regexp = optarg;
@@ -48,18 +53,32 @@ ReturnCode ProcessArgs(int argc, char *const *argv, GrepConfig *config) {
           config->no_filename = 1;
           break;
         case 's':
-          config->no_filename = 1;
+          config->suppress_error = 1;
           break;
         case 'f':
           config->regexp_file = optarg;
           break;
-        case 'o':
-          config->only_matching = 1;
-          break;
       }
     }
-    return_code = ProcessFile(argv[optind++], config);
   }
+
+  if (files->size >= 1) {
+    size_t i = 0;
+    if (!config->regexp && !config->regexp_file) {
+      config->pattern = vect_at_char_ptr(files, 0);
+      i = 1;
+    }
+    for (; i < files->size && return_code == OK; i++) {
+      return_code = ProcessFile(vect_at_char_ptr(files, i), config);
+      if (return_code == FILE_DONT_EXIST && config->suppress_error) {
+        return_code = OK;
+      }
+    }
+  } else {
+    return_code = INVALID_ARGUMENTS;
+  }
+
+  vect_free(files);
 
   return return_code;
 }

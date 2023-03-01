@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
 
   return_code = ProcessArgs(argc, argv, &config);
 
-  if (return_code != OK && return_code != INVALID_ARGUMENTS) {
+  if (return_code != OK) {
     printf("ERROR: %s\n", GetCodeName(return_code));
   }
 

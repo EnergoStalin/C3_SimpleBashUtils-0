@@ -10,7 +10,7 @@
 
 #define IFFLAG(flag, value) ((flag) ? (value) : 0)
 
-ReturnCode CompileRegexWithFlags(char *pattern, const GrepConfig *config,
+ReturnCode CompileRegexWithFlags(char *regexp, const GrepConfig *config,
                                  regex_t *reg);
 ReturnCode ReadRegexesFromFile(char *file, const GrepConfig *config,
                                vect_regex_t_ptr *regexs);

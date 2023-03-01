@@ -17,3 +17,9 @@ debug: rebuild
 .PHONY: clean
 clean:
 	rm -rf $(EXEC) *.o
+
+_run_test: $(EXEC)
+	python3 test/$(EXEC).py
+
+.PHONY: test
+test: _run_test clean

@@ -2,6 +2,7 @@
 #define SRC_GREP_GREP_CONFIG_H
 
 typedef struct {
+  char *pattern;
   char *regexp;            // -e
   int ignore_case;         // -i
   int invert_match;        // -v

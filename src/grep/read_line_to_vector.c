@@ -1,17 +1,16 @@
 #include "read_line_to_vector.h"
 
+#define LAST_VECT(v) (vect_at_char((v), ((v)->size - 1)))
+
 int ReadLineToVector(FILE *fptr, vect_char *line) {
   line->size = 0;
-  int c = 0, eof = 0;
-  while (c != '\n' && (eof = (c = getc(fptr)) != EOF)) {
+  int c = 0;
+  while ((c != '\n') && c != EOF) {
+    c = getc(fptr);
     vect_push_char(line, c);
   }
 
-  if (eof == EOF) {
-    vect_push_char(line, 0);
-  } else {
-    line->data[line->size - 1] = 0;
-  }
+  vect_push_char(line, 0);
 
-  return eof;
+  return c;
 }
