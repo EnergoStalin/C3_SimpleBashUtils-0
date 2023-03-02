@@ -22,41 +22,50 @@ static inline void number_nonblank(int curr) {
   }
 }
 
-static inline void number_lines() {
+static inline void number_lines(int prev) {
   static size_t count = 1;
-  fprintf(stdout, "%6lu\t", count++);
+  if (prev == '\n') {
+    count++;
+  }
+  fprintf(stdout, "%6lu\t", count);
 }
 
-static inline void verbose(int curr) {
-  if ((curr >= 0 && curr < 9) || (curr > 10 && curr <= 31)) {
+static inline int verbose(int curr, const CatConfig *config) {
+  int put = 1;
+  if (curr >= 32) {
+    if (curr < 127) {
+      putchar(curr);
+    } else if (curr == 127) {
+      putchar('^');
+      putchar('?');
+    } else {
+      putchar('M');
+      putchar('-');
+      if (curr >= 128 + 32) {
+        if (curr < 128 + 127) {
+          putchar(curr - 128);
+        } else {
+          putchar('^');
+          putchar('?');
+        }
+      } else {
+        putchar('^');
+        putchar(curr - 128 + 64);
+      }
+    }
+    put = 0;
+  } else if (curr == '\t' && !config->extra_symbols_tabs) {
+    putchar('\t');
+    put = 0;
+  } else if (curr != '\n') {
     putchar('^');
-    curr += 64;
+    putchar(curr + 64);
+    put = 0;
+  } else if (config->extra_symbols_endline) {
+    putchar('$');
   }
-  if (curr == 127) {
-    putchar('^');
-    curr = '?';
-  }
-  if (curr >= 128 && curr <= 159) {
-    puts("M-^");
-    curr -= 64;
-  }
-  if (curr >= 160 && curr <= 255) {
-    puts("M-");
-    curr -= 128;
-  }
-}
 
-static inline void extra_symbols(int *curr, const CatConfig *config) {
-  if (*curr == '\n') {
-    if (config->extra_symbols_endline) {
-      fputc('$', stdout);
-    }
-  } else if (*curr == '\t') {
-    if (config->extra_symbols_tabs) {
-      fputs("^I", stdout);
-      *curr = 0;
-    }
-  }
+  return put;
 }
 
 ReturnCode ProcessFile(char *path, const CatConfig *config) {
@@ -65,10 +74,13 @@ ReturnCode ProcessFile(char *path, const CatConfig *config) {
   FILE *fd = path ? fopen(path, "r") : stdin;
 
   if (fd) {
-    int prev = '\n';
+    static int first = 1;
+    static int prev = 0;
     int curr = 0;
     while ((curr = fgetc(fd)) != EOF) {
-      if (prev == '\n') {
+      int put = 1;
+      if (prev == '\n' || first) {
+        first = 0;
         if (config->squeeze_blank) {
           if (count_blank(curr) > 1) {
             continue;
@@ -79,17 +91,17 @@ ReturnCode ProcessFile(char *path, const CatConfig *config) {
           number_nonblank(curr);
         }
         if (config->number_lines) {
-          number_lines();
+          number_lines(prev);
         }
       }
 
-      extra_symbols(&curr, config);
-
       if (config->verbose) {
-        verbose(curr);
+        put = verbose(curr, config);
       }
 
-      putchar(curr);
+      if(put) {
+        putchar(curr);
+      }
       prev = curr;
     }
     fclose(fd);

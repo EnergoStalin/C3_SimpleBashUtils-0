@@ -15,8 +15,10 @@ import subprocess, itertools, json, os
 
 def run_tests(exe, tArgs, tFiles, extra = [], rArgs = []):
   eReport = './report'
-  if(os.path.exists(eReport)):
-    os.remove(eReport)
+  
+  for f in [eReport, 's21', 'orig']:
+      if(os.path.exists(f)):
+        os.remove(f)
 
   for i in range(1, len(tArgs)):
     args = []
@@ -29,7 +31,11 @@ def run_tests(exe, tArgs, tFiles, extra = [], rArgs = []):
 
         if (s21.stdout != orig.stdout):
             with open(eReport, 'w') as f:
-                f.write(f's21:\n\n{s21.stdout.decode("utf-8")}\n\n\norig:\n\n{orig.stdout.decode("utf-8")}')
+              f.write(f's21:\n\n{s21.stdout}\n\n\norig:\n\n{orig.stdout}')
+            with open('./s21', 'wb') as f:
+              f.write(s21.stdout)
+            with open('./orig', 'wb') as f:
+              f.write(orig.stdout)
             raise Exception(f'Stdout mismatch {json.dumps(args)}')
         
     args = ['valgrind', '--', f'./s21_{exe}', *args]
