@@ -41,10 +41,13 @@ ReturnCode ProcessArgs(int argc, char *const *argv, GrepConfig *config) {
           config->invert_match = 1;
           break;
         case 'c':
-          config->count = 1;
+          if (!config->files_with_matches) {
+            config->count = 1;
+          }
           break;
         case 'l':
           config->files_with_matches = 1;
+          config->count = 0;
           break;
         case 'n':
           config->number_lines = 1;

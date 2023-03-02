@@ -23,3 +23,11 @@ _run_test: $(EXEC)
 
 .PHONY: test
 test: _run_test clean
+
+.PHONY: verter
+verter:
+	cd ../../materials/build/ && ./run.sh
+
+.PHONY: format
+format:
+	clang-format --style=Google -i ../**/*.h ../**/*.c

@@ -99,7 +99,7 @@ ReturnCode ProcessFile(char *path, const CatConfig *config) {
         put = verbose(curr, config);
       }
 
-      if(put) {
+      if (put) {
         putchar(curr);
       }
       prev = curr;

@@ -11,12 +11,22 @@
 # Written by Mike Haertel and others; see
 # <https://git.sv.gnu.org/cgit/grep.git/tree/AUTHORS>.
 
-import subprocess, itertools, json, os
+import subprocess, itertools, json, os, re
+
+def update_debug_args(exe, args):
+  try:
+    with open('../../.vscode/launch.json', 'r+', encoding='utf-8') as f:
+      launch = json.loads(re.sub('\\/\\/.*', '', f.read()))
+      f.seek(0)
+      i = [t['name'] for t in launch['configurations']].index(f's21_{exe} (gdb) Launch')
+      launch['configurations'][i]['args'] = args
+      f.truncate(0)
+      json.dump(launch, f, indent=2)
+  except:
+    pass
 
 def run_tests(exe, tArgs, tFiles, extra = [], rArgs = []):
-  eReport = './report'
-  
-  for f in [eReport, 's21', 'orig']:
+  for f in ['valgrind', 's21', 'orig']:
       if(os.path.exists(f)):
         os.remove(f)
 
@@ -30,18 +40,19 @@ def run_tests(exe, tArgs, tFiles, extra = [], rArgs = []):
         print(args)
 
         if (s21.stdout != orig.stdout):
-            with open(eReport, 'w') as f:
-              f.write(f's21:\n\n{s21.stdout}\n\n\norig:\n\n{orig.stdout}')
             with open('./s21', 'wb') as f:
               f.write(s21.stdout)
             with open('./orig', 'wb') as f:
               f.write(orig.stdout)
+
+            update_debug_args(exe, args)
+              
             raise Exception(f'Stdout mismatch {json.dumps(args)}')
         
     args = ['valgrind', '--', f'./s21_{exe}', *args]
     valgrind = subprocess.run(args, capture_output=True, timeout=3)
     stderr = valgrind.stderr.decode('utf-8')
     if not('no leaks are possible' in stderr.lower()):
-      with open(eReport, 'w') as f:
+      with open('./valgrind', 'w', encoding='utf-8') as f:
         f.write(f'valgrind:\n\n{stderr}')
       raise Exception(f'Valgrind error {" ".join(args)}')

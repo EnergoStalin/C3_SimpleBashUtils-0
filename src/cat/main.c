@@ -4,7 +4,7 @@
 #include "cat_config.h"
 #include "process_args.h"
 
-int main(int argc, char* const* argv) {
+int main(int argc, char *const *argv) {
   ReturnCode return_code = OK;
   CatConfig config = {0};
 

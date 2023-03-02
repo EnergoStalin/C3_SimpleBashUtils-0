@@ -25,7 +25,6 @@ ReturnCode ReadRegexesFromFile(char *file, const GrepConfig *config,
       }
 
       regex_t *reg = calloc(sizeof(regex_t), 1);
-      *vect_ptr_char(line, line->size - 2) = 0;
       if (CompileRegexWithFlags(line->data, config, reg) == OK) {
         vect_push_regex_t_ptr(regexs, reg);
       } else {

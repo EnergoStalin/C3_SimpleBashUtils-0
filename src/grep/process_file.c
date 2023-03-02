@@ -18,27 +18,67 @@ typedef struct {
   const GrepConfig *config;
 } FileDescriptor;
 
-void do_file(const FileDescriptor *fd, vect_regex_t_ptr *regexes) {
+static inline void print_match(const FileDescriptor *fd, size_t line_number,
+                               vect_char *buffer) {
+  if (!fd->config->count && !fd->config->files_with_matches) {
+    if (!fd->config->no_filename) {
+      printf("%s:", fd->name);
+    }
+    if (fd->config->number_lines) {
+      printf("%lu:", line_number);
+    }
+
+    printf("%s\n", buffer->data);
+  }
+}
+
+static inline void print_summary(const FileDescriptor *fd, size_t matches) {
+  if (fd->config->files_with_matches && matches > 0) {
+    printf("%s\n", fd->name);
+  } else {
+    if (fd->config->count) {
+      if (!fd->config->no_filename) {
+        printf("%s:", fd->name);
+      }
+      printf("%lu\n", matches);
+    }
+  }
+}
+
+static inline int do_regex_match(vect_regex_t_ptr *regexes, vect_char *buffer) {
+  int match = REG_NOMATCH;
+  for (size_t i = 0; i < regexes->size && match == REG_NOMATCH; i++) {
+    match = regexec(vect_at_regex_t_ptr(regexes, i), buffer->data, (size_t)0,
+                    NULL, 0);
+  }
+  return match;
+}
+
+static inline int do_pattern_match(const FileDescriptor *fd,
+                                   vect_char *buffer) {
+  int match = REG_NOMATCH;
+  if (fd->config->ignore_case) {
+    match = strcasestr(buffer->data, fd->config->pattern) != 0;
+  } else {
+    match = strstr(buffer->data, fd->config->pattern) != 0;
+  }
+  return match ? !REG_NOMATCH : REG_NOMATCH;
+}
+
+static inline void do_file(const FileDescriptor *fd,
+                           vect_regex_t_ptr *regexes) {
   vect_char *buffer = vect_init_char(250);
   size_t line_number = 0;
   size_t matches = 0;
+  int match = REG_NOMATCH;
 
-  while (ReadLineToVector(fd->ptr, buffer) != EOF) {
+  while (ReadLineToVector(fd->ptr, buffer) != EOF || buffer->size > 1) {
     line_number++;
 
-    int match = REG_NOMATCH;
     if (regexes->size > 0) {
-      for (size_t i = 0; i < regexes->size && match == REG_NOMATCH; i++) {
-        match = regexec(vect_at_regex_t_ptr(regexes, i), buffer->data,
-                        (size_t)0, NULL, 0);
-      }
+      match = do_regex_match(regexes, buffer);
     } else if (fd->config->pattern) {
-      if (fd->config->ignore_case) {
-        match = strcasestr(buffer->data, fd->config->pattern) != 0;
-      } else {
-        match = strstr(buffer->data, fd->config->pattern) != 0;
-      }
-      match = match ? !REG_NOMATCH : REG_NOMATCH;
+      match = do_pattern_match(fd, buffer);
     } else {
       match = !REG_NOMATCH;
     }
@@ -50,28 +90,11 @@ void do_file(const FileDescriptor *fd, vect_regex_t_ptr *regexes) {
     if (match != REG_NOMATCH) {
       matches++;
 
-      if (!fd->config->count && !fd->config->files_with_matches) {
-        if (!fd->config->no_filename) {
-          printf("%s:", fd->name);
-        }
-        if (fd->config->number_lines) {
-          printf("%lu:", line_number);
-        }
-        printf("%s", buffer->data);
-      }
+      print_match(fd, line_number, buffer);
     }
   }
 
-  if (fd->config->files_with_matches && matches > 0) {
-    printf("%s\n", fd->name);
-  } else {
-    if (fd->config->count) {
-      if (!fd->config->no_filename) {
-        printf("%s:", fd->name);
-      }
-      printf("%lu\n", matches);
-    }
-  }
+  print_summary(fd, matches);
 
   vect_free(buffer);
 }
