@@ -70,10 +70,10 @@ ReturnCode ProcessArgs(int argc, char *const *argv, GrepConfig *config) {
     if (!config->regexp && !config->regexp_file) {
       config->pattern = vect_at_char_ptr(files, 0);
       i = 1;
-      if(files->size == 2) {
+      if (files->size == 2) {
         config->no_filename = 1;
       }
-    } else if(files->size == 1) {
+    } else if (files->size == 1) {
       config->no_filename = 1;
     }
     for (; i < files->size && return_code == OK; i++) {
