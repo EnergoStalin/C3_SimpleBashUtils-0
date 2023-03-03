@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  simplebashutilstests:
+    container_name: SimpleBashUtilsTests
+    build:
+      context: ../
+      dockerfile: ./common/Dockerfile
+    volumes:
+      - ./reports/cat:/build/cat/report
+      - ./reports/grep:/build/grep/report
+      - ../../.vscode:/.vscode

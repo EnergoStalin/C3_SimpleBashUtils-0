@@ -6,6 +6,7 @@ all: rebuild
 .PHONY: $(EXEC)
 $(EXEC): $(wildcard *.c) $(wildcard ../common/*.c)
 	$(CC) $(CFLAGS) $^ -o $@
+	chmod +x $(EXEC)
 
 .PHONY: rebuild
 rebuild: clean $(EXEC)
@@ -18,11 +19,16 @@ debug: rebuild
 clean:
 	rm -rf $(EXEC) *.o
 
-_run_test: $(EXEC)
+.PHONY: _test_prebuild
+_test_prebuild:
 	python3 test/$(EXEC).py
 
 .PHONY: test
-test: _run_test clean
+test: $(EXEC) _test_prebuild clean
+
+.PHONY: docker
+docker:
+	cd ../common && docker compose up --build $(ARGS)
 
 .PHONY: verter
 verter:
